@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\api-sistema-de-empleados.props" />
+</Project>

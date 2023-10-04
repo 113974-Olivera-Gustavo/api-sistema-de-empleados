@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Empleados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body>
+    <body>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-5 fw-bold" href="index.html">Volver al Login</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse me-auto" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 fw-bold" href="listadoC.html">Lista de Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 fw-bold" href="listado.html">Lista de Empleados</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 fw-bold" href="admEmpleados.html">Administrar Empleados</a>
+                    </li> <li class="nav-item">
+                        <a class="nav-link fs-5 fw-bold" href="admClientes.html">Administrar Clientes</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    </nav>
+    <div class="container">
+        <h1>Lista de Empleados</h1>
+        <hr>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre y apellido</th>
+                    <th scope="col">Cargo</th>
+                    <th scope="col">Edad</th>
+                    <th scope="col">Salario</th>
+
+                </tr>
+            </thead>
+            <tbody id="empleados"></tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.4/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script>
+       $(document).ready(function () {
+  obtenerEmpleados();
+});
+
+function obtenerEmpleados() {
+  $.ajax({
+    url: "https://localhost:7234/getEmpleados",
+    type: "GET",
+    success: function (empleados) {
+      obtenerCargos(function (cargos) {
+        $("#empleados").empty();
+
+        empleados.forEach(function (empleado) {
+          var nombreCompleto = empleado.nombre + " " + empleado.apellido;
+
+        
+          var fila =
+            '<tr>' +
+            '<td>' + empleado.idEmpleado + '</td>' +
+            '<td>' + nombreCompleto + '</td>' +
+            '<td>' + empleado.cargo + '</td>' + 
+            '<td>' + empleado.edad + '</td>' +
+            '<td>' + empleado.salario + '</td>' +
+            '</tr>';
+                console.log(empleado)
+          $("#empleados").append(fila);
+        });
+      });
+    },
+    error: function () {
+      alert("Error al obtener los empleados.");
+    }
+  });
+}
+
+function obtenerCargos(callback) {
+  $.ajax({
+    url: "https://localhost:7234/getCargos", // Reemplaza esta URL con la URL correcta de tu endpoint de obtención de cargos
+    type: "GET",
+    success: function (cargos) {
+      callback(cargos);
+    },
+    error: function () {
+      alert("Error al obtener los cargos.");
+      callback([]);
+    }
+  });
+}
+
+    </script>
+</body>
+
+</html>
